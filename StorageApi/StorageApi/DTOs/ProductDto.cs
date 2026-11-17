@@ -16,7 +16,8 @@ namespace StorageApi.DTOs
 
         [Range(0, int.MaxValue)]
         public int Count { get; set; }
-        
+
+        public string? Category { get; set; }
         public int InventoryValue => Price * Count;
 
     }

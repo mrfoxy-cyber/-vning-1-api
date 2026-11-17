@@ -111,4 +111,29 @@ public class ProductsController : ControllerBase
     {
         return _context.Product.Any(e => e.Id == id);
     }
+
+    // GET: api/Product/stats
+    [HttpGet("stats/{categoryName}")]
+    public async Task<ActionResult<ProductStatsDto>> GetProductStats(
+        string categoryName)
+    {
+        var query = _context.Product
+            .Where(p => p.Category == categoryName);
+
+        var totalProducts = await query.CountAsync();
+
+        var totalInventoryValue = await query
+            .SumAsync(p => (decimal)p.Price * p.Count);
+
+        var averagePrice = totalProducts > 0
+            ? await query.AverageAsync(p => (decimal)p.Price)
+            : 0m;
+
+        return new ProductStatsDto
+        {
+            TotalProducts = totalProducts,
+            TotalInventoryValue = totalInventoryValue,
+            AveragePrice = averagePrice
+        };
+    }
 }

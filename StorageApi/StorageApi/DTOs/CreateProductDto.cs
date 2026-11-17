@@ -24,5 +24,6 @@ namespace StorageApi.DTOs
 
         [StringLength(500)]
         public string? Description { get; set; }
+
     }
 }
